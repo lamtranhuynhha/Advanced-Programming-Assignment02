@@ -1,12 +1,3 @@
-/*
- * LTNC - HK242
- * file : Main.java
- * SRC template
- * Author: Võ Tiến
- * Link FB : https://www.facebook.com/Shiba.Vo.Tien
- * Link Group : https://www.facebook.com/groups/khmt.ktmt.cse.bku
- * Date: 22.03.2025
- */
 package com.myproject;
 
 import java.io.ByteArrayOutputStream;
@@ -48,8 +39,6 @@ public class Main {
     private static StockTickerView tickerView;
 
     public static void main(String[] args) {
-        //resetStockFeeder();
-        //StockFeeder_Testcase_UnregisterDifferentInstance();
 
         resetStockFeeder();
         StockFeeder_Testcase_01();
@@ -113,33 +102,6 @@ public class Main {
 
         printResult();
     }
-    // Test: Unregistering a logically equivalent but different instance of StockAlertView
-/*private static void StockFeeder_Testcase_UnregisterDifferentInstance() {
-    String output = captureOutput(() -> {
-        StockFeeder feeder = StockFeeder.getInstance();
-        String stockCode = "TEST";
-
-        // Add stock to the feeder
-        feeder.addStock(new Stock(stockCode, "Test Stock"));
-
-        // Register a StockAlertView with specific thresholds
-        StockAlertView registeredView = new StockAlertView(100, 200);
-        feeder.registerViewer(stockCode, registeredView);
-
-        // Attempt to unregister a different instance of StockAlertView
-        StockAlertView differentInstance = new StockAlertView(0, 0);
-        feeder.unregisterViewer(stockCode, differentInstance);
-    });
-
-    // Check if the correct warning is logged
-    if (output.contains("[WARNING] Error when unregistering with TEST")) {
-        System.out.println(ANSI_GREEN + "Pass StockFeeder_Testcase_UnregisterDifferentInstance" + ANSI_RESET);
-        count_pass_test++;
-    } else {
-        System.out.println(output);
-        System.out.println(ANSI_RED + "Fail StockFeeder_Testcase_UnregisterDifferentInstance" + ANSI_RESET);
-    }
-}*/
 
     private static void StockFeeder_Testcase_11() {
         String output = captureOutput(() -> {
@@ -162,15 +124,15 @@ public class Main {
     private static void StockFeeder_Testcase_12() {
         String output = captureOutput(() -> {
             StockFeeder feeder = StockFeeder.getInstance();
-            feeder.addStock(new Stock("LTNC-VT", "Lap Trinh Nang Cao - Vo Tien"));
+            feeder.addStock(new Stock("LTNC", "Lap Trinh Nang Cao"));
             StockRealtimePriceView view1 = new StockRealtimePriceView();
             StockAlertView al_view2 = new StockAlertView(100, 50);
             StockAlertView al_view3 = new StockAlertView(200, 130);
             StockRealtimePriceView view2 = new StockRealtimePriceView();
-            feeder.registerViewer("LTNC-VT", view1);
-            feeder.registerViewer("LTNC-VT", al_view2);
-            feeder.registerViewer("LTNC-VT", al_view3);
-            feeder.registerViewer("LTNC-VT", view2);
+            feeder.registerViewer("LTNC", view1);
+            feeder.registerViewer("LTNC", al_view2);
+            feeder.registerViewer("LTNC", al_view3);
+            feeder.registerViewer("LTNC", view2);
         });
         if (2 == countOccurrences(output, "[WARNING] Error when registering with LTNC-VT")) {
             System.out.println(ANSI_GREEN + "Pass StockFeeder_Testcase_12: Error Register Viewer with same stock" + ANSI_RESET);
@@ -276,7 +238,7 @@ public class Main {
             StockFeeder feeder = StockFeeder.getInstance();
             feeder.addStock(new Stock("LTNC", "Lap Trinh Nang Cao"));
             StockAlertView view1 = new StockAlertView(100, 50);
-            feeder.registerViewer("LTNC_VT", view1);
+            feeder.registerViewer("LTNC_VV", view1);
         });
         if (output.contains("[WARNING] Error when registering with LTNC_VT")) {
             System.out.println(ANSI_GREEN + "Pass StockFeeder_Testcase_06: Error Register" + ANSI_RESET);
@@ -294,7 +256,7 @@ public class Main {
             feeder.addStock(new Stock("LTNC", "Lap Trinh Nang Cao"));
             StockAlertView view1 = new StockAlertView(100, 50);
             feeder.registerViewer("LTNC", view1);
-            feeder.unregisterViewer("LTNC_VT", view1);
+            feeder.unregisterViewer("LTNC_TT", view1);
         });
         if (output.contains("[WARNING] Error when unregistering with LTNC_VT")) {
             System.out.println(ANSI_GREEN + "Pass StockFeeder_Testcase_07: Error Unregister" + ANSI_RESET);
@@ -357,11 +319,11 @@ public class Main {
     private static void StockAlertView_Testcase_02() {
         String output = captureOutput(() -> {
             StockAlertView view = new StockAlertView(100, 50);
-            StockPrice sp = new StockPrice("VT-LTNC", 105, 1000, 1711368000);
+            StockPrice sp = new StockPrice("LTNC", 105, 1000, 1711368000);
             view.onUpdate(sp);
         });
         // Logger in ra định dạng: "[ALERT] ABC price changed significantly to $105.0"
-        if (output.contains("[ALERT] VT-LTNC price changed significantly to $105.0")) {
+        if (output.contains("[ALERT] LTNC price changed significantly to $105.0")) {
             System.out.println(ANSI_GREEN + "Pass StockAlertView Test 2: Alert Above" + ANSI_RESET);
             count_pass_test++;
         } else {
@@ -374,10 +336,10 @@ public class Main {
     private static void StockAlertView_Testcase_03() {
         String output = captureOutput(() -> {
             StockAlertView view = new StockAlertView(100, 50);
-            StockPrice sp = new StockPrice("VT", 45, 1000, 1711368888);
+            StockPrice sp = new StockPrice("DY", 45, 1000, 1711368888);
             view.onUpdate(sp);
         });
-        if (output.contains("[ALERT] VT price changed significantly to $45.0")) {
+        if (output.contains("[ALERT] DY price changed significantly to $45.0")) {
             System.out.println(ANSI_GREEN + "Pass StockAlertView Test 3: Alert Below" + ANSI_RESET);
             count_pass_test++;
         } else {
@@ -424,13 +386,13 @@ public class Main {
     private static void StockAlertView_Testcase_06() {
         String output = captureOutput(() -> {
             StockFeeder feeder = StockFeeder.getInstance();
-            feeder.addStock(new Stock("VT", "Vo Tien"));
+            feeder.addStock(new Stock("VN", "Viet Nam"));
             StockAlertView view = new StockAlertView(100, 50);
-            feeder.registerViewer("VT", view);
-            StockPrice sp = new StockPrice("VT", 110, 1000, 0);
+            feeder.registerViewer("VN", view);
+            StockPrice sp = new StockPrice("VN", 110, 1000, 0);
             feeder.notify(sp);
         });
-        if (output.contains("[ALERT] VT price changed significantly to $110.0")) {
+        if (output.contains("[ALERT] VN price changed significantly to $110.0")) {
             System.out.println(ANSI_GREEN + "Pass StockAlertView Test 6: Register & Notify" + ANSI_RESET);
             count_pass_test++;
         } else {
@@ -466,14 +428,14 @@ public class Main {
     private static void StockAlertView_Testcase_08() {
         String output = captureOutput(() -> {
             StockFeeder feeder = StockFeeder.getInstance();
-            feeder.addStock(new Stock("LTNC-VT", "Lap Trinh Nang Cao - Vo Tien"));
+            feeder.addStock(new Stock("LTNC-VN", "Lap Trinh Nang Cao"));
             StockAlertView view = new StockAlertView(100, 50);
-            feeder.registerViewer("LTNC-VT", view);
-            feeder.unregisterViewer("LTNC-VT", view);
-            StockPrice sp = new StockPrice("LTNC-VT", 105, 1000, 0);
+            feeder.registerViewer("LTNC-VN", view);
+            feeder.unregisterViewer("LTNC-VN", view);
+            StockPrice sp = new StockPrice("LTNC-VN", 105, 1000, 0);
             feeder.notify(sp);
         });
-        if (!output.contains("[ALERT] LTNC-VT price changed significantly to $105.0")) {
+        if (!output.contains("[ALERT] LTNC-VN price changed significantly to $105.0")) {
             System.out.println(ANSI_GREEN + "Pass StockAlertView Test 8: Unregister Viewer" + ANSI_RESET);
             count_pass_test++;
         } else {
